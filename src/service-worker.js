@@ -70,3 +70,24 @@ self.addEventListener('message', (event) => {
 });
 
 // Any other custom service worker logic can go here.
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open('app-cache').then((cache) => {
+      return cache.addAll([
+        '/index.html',
+        '/styles.css',
+        '/script.js',
+        '/icons/icon-192x192.png',
+        '/icons/icon-512x512.png'
+      ]);
+    })
+  );
+});
+
+let deferredPrompt;
+self.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Show your custom install UI
+  console.log('beforeinstallprompt');
+});
